@@ -1,4 +1,5 @@
 ---
+
 - name: authorized ssh keys for user root
   authorized_key: user=root key={{ item }}
   with_items: "{{ authorized_ssh_keys }}"
@@ -18,20 +19,22 @@
 
 # Security settings
 
+- set_fact: ssh_port={{ ansible_ssh_port | default('ssh') }}
+
 - name: ufw package
   apt: name=ufw state=present
   tags: packages
 
 - name: firewall/ssh limit policy from gateways
-  ufw: rule=limit port=ssh from={{ item }}
+  ufw: rule=limit port={{ ssh_port }} from={{ item }}
   with_items: "{{ limit_ssh_from }}"
 
 - name: firewall/ssh delete policy from all
-  ufw: rule=limit port=ssh delete=yes
+  ufw: rule=limit port={{ ssh_port }} delete=yes
   when: "{{ limit_ssh_from | count > 0 }}"
 
 - name: firewall/ssh limit policy from all
-  ufw: rule=limit port=ssh
+  ufw: rule=limit port={{ ssh_port }}
   when: "{{ limit_ssh_from | count == 0 }}"
 
 - ufw: direction=outgoing policy=allow
