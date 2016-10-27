@@ -1,0 +1,60 @@
+---
+- name: authorized ssh keys for user root
+  authorized_key: user=root key={{ item }}
+  with_items: "{{ authorized_ssh_keys }}"
+  tags: ssh-keys
+
+- name: "dist upgrade"
+  apt: update_cache=yes upgrade=dist force=yes
+  when:  do_upgrade == 'dist'
+
+- name: "normal upgrade"
+  apt: update_cache=yes upgrade=safe force=yes
+  when: do_upgrade == "yes"
+
+- name: .bashrc
+  copy: src=files/.bashrc dest=/root/.bashrc owner=root group=root mode=0644
+  when: ansible_distribution == 'Debian'
+
+# Security settings
+
+- name: ufw package
+  apt: name=ufw state=present
+  tags: packages
+
+- name: firewall/ssh limit policy from gateways
+  ufw: rule=limit port=ssh from={{ item }}
+  with_items: "{{ limit_ssh_from }}"
+
+- name: firewall/ssh delete policy from all
+  ufw: rule=limit port=ssh delete=yes
+  when: "{{ limit_ssh_from | count > 0 }}"
+
+- name: firewall/ssh limit policy from all
+  ufw: rule=limit port=ssh
+  when: "{{ limit_ssh_from | count == 0 }}"
+
+- ufw: direction=outgoing policy=allow
+- ufw: state=enabled direction=incoming policy=deny
+
+- name: firewall extra tcp ports
+  ufw: rule=allow port={{ item }}
+  with_items: "{{ allow_tcp_ports }}"
+
+# packages
+
+- name: extra packages
+  apt: name={{ item }}
+  tags: packages
+  with_items: "{{ packages | default([]) }}"
+
+# system settings
+
+- name: journald persistent storage
+  ini_file:
+    dest: /etc/systemd/journald.conf
+    section: Journal
+    option: Storage
+    value: persistent
+
+- hostname: name={{inventory_hostname}}
