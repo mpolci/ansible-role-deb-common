@@ -5,13 +5,20 @@
   with_items: "{{ authorized_ssh_keys }}"
   tags: ssh-keys
 
+- name: "aptitude package"
+  apt: name=aptitude state=present
+  when: do_upgrade is defined
+  tags: packages
+
 - name: "dist upgrade"
   apt: update_cache=yes upgrade=dist force=yes
   when:  do_upgrade == 'dist'
+  tags: packages
 
 - name: "normal upgrade"
   apt: update_cache=yes upgrade=safe force=yes
   when: do_upgrade == "yes"
+  tags: packages
 
 - name: .bashrc
   copy: src=files/.bashrc dest=/root/.bashrc owner=root group=root mode=0644
