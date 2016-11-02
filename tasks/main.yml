@@ -7,7 +7,7 @@
 
 - name: "aptitude package"
   apt: name=aptitude state=present
-  when: do_upgrade is defined
+  when: do_upgrade is defined and ansible_distribution == 'Ubuntu'
   tags: packages
 
 - name: "dist upgrade"
