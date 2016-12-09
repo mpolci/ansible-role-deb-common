@@ -51,6 +51,13 @@
   ufw: rule=allow port={{ item }}
   with_items: "{{ allow_tcp_ports }}"
 
+- name: firewall extra tcp ports from restricted sources
+  ufw: rule=allow port={{ item.0.port }} from={{ item.1 }}
+  with_subelements:
+    - "{{ allow_tcp_ports_from }}"
+    - from
+  tags: prova
+
 # packages
 
 - name: extra packages
