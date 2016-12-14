@@ -3,6 +3,19 @@
 - name: authorized ssh keys for user root
   authorized_key: user=root key={{ item }}
   with_items: "{{ authorized_ssh_keys }}"
+  register: add_identity_key
+  tags: ssh-keys
+
+- name: Disable ssh password login
+  lineinfile: dest=/etc/ssh/sshd_config regexp="^#?PasswordAuthentication" line="PasswordAuthentication no"
+  when: add_identity_key|success and authorized_ssh_keys
+  notify: restart sshd
+  tags: ssh-keys
+
+- name: Enable ssh password login
+  lineinfile: dest=/etc/ssh/sshd_config regexp="^#?PasswordAuthentication" line="PasswordAuthentication yes"
+  when: not authorized_ssh_keys
+  notify: restart sshd
   tags: ssh-keys
 
 - name: "aptitude package"
