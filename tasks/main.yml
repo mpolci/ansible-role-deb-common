@@ -88,3 +88,8 @@
     value: persistent
 
 - hostname: name={{inventory_hostname}}
+
+# nrpe installation
+- include: nrpe.yml
+  when: icinga_server is defined
+  tags: nrpe

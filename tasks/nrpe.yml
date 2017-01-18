@@ -1,0 +1,27 @@
+---
+- assert:
+    that:
+      - icinga_server is defined
+
+- name: Install nrpe  packages
+  apt:
+    name: "{{ item }}"
+    install_recommends: no
+  with_items:
+    - nagios-nrpe-server
+    - nagios-plugins
+    - nagios-plugins-contrib
+    - nagios-nrpe-plugin
+
+- name: Install nrpe config file
+  template: src=nrpe.cfg.j2 dest=/etc/nagios/nrpe.cfg
+  notify:
+    - restart nrpe
+
+- name: Install nrpe check
+  copy: src={{ item }} dest=/usr/lib/nagios/plugins/ mode=0755
+  with_fileglob:
+    - files/check/*
+
+- name: Allow access rule
+  ufw: rule=allow port=5666 src="{{ icinga_server }}"
