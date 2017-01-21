@@ -92,4 +92,4 @@
 # nrpe installation
 - include: nrpe.yml
   when: icinga_server is defined
-  tags: nrpe
+  tags: [nrpe, monitoring]
