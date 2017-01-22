@@ -5,3 +5,8 @@
 - name: restart nrpe
   service: name=nagios-nrpe-server
            state=restarted
+
+# rsyslog doesn't support reload
+- name: reload rsyslog
+  service: name=rsyslog
+           state=restarted

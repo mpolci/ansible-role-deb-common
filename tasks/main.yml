@@ -90,6 +90,17 @@
 - hostname: name={{inventory_hostname}}
 
 # nrpe installation
+
 - include: nrpe.yml
   when: icinga_server is defined
   tags: [nrpe, monitoring]
+
+# forward syslog
+
+- name: "rsyslog configuration to forward logs"
+  template: src=rsyslog_forward.conf.j2 dest=/etc/rsyslog.d/90-forward.conf
+  when: syslog_forward_to is defined
+  notify:
+    - reload rsyslog
+  tags: [syslog, monitoring]
+
