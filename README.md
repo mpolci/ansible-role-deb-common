@@ -19,4 +19,4 @@ These variables could be configured:
   it is created a check named _check_name_service_, where name is the name in the list.
 - **nrpe_custom_commands**: A list of objects to define custom nrpe checks. Each item must contain the _name_ field and
   the _check_ field with the nagios check command to run.
-  
+- **syslog_forward_to**: _address:port_ destination for syslog messages  
