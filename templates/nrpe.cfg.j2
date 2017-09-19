@@ -223,7 +223,7 @@ command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
 command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 165 -c 220
 command[check_apt]=/usr/lib/nagios/plugins/check_apt
 command[check_swap]=/usr/lib/nagios/plugins/check_swap -w 10% -c 5%
-command[check_ntp]=/usr/lib/nagios/plugins/check_ntp_time -H pool.ntp.org -w 0.5 -c 1
+command[check_ntp]=/usr/lib/nagios/plugins/check_ntp_time -H pool.ntp.org -w 1 -c 2
 
 {% for service_name in nrpe_systemd_services %}
 command[check_{{ service_name }}_service]=/usr/lib/nagios/plugins/check_sistemd.sh {{ service_name }}
