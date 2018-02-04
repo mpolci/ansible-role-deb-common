@@ -1,1 +1,8 @@
-*.* @{{ syslog_forward_to }};RSYSLOG_SyslogProtocol23Format
+$ModLoad omrelp
+
+$ActionQueueFileName fwdgraylog
+$ActionQueueMaxDiskSpace 4g
+$ActionQueueSaveOnShutdown on
+$ActionQueueType LinkedList
+$ActionResumeRetryCount -1
+*.* @@{{ syslog_forward_to }};RSYSLOG_SyslogProtocol23Format
