@@ -25,3 +25,4 @@
 
 - name: Allow access rule
   ufw: rule=allow port=5666 src="{{ icinga_server }}"
+  tags: firewall

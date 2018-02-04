@@ -48,28 +48,35 @@
 - name: firewall/ssh limit policy from gateways
   ufw: rule=limit port={{ ssh_port }} from={{ item }}
   with_items: "{{ limit_ssh_from }}"
+  tags: firewall
 
 - name: firewall/ssh delete policy from all
   ufw: rule=limit port={{ ssh_port }} delete=yes
   when: "{{ limit_ssh_from | count > 0 }}"
+  tags: firewall
 
 - name: firewall/ssh limit policy from all
   ufw: rule=limit port={{ ssh_port }}
   when: "{{ limit_ssh_from | count == 0 }}"
+  tags: firewall
 
 - ufw: direction=outgoing policy=allow
+  tags: firewall
+
 - ufw: state=enabled direction=incoming policy=deny
+  tags: firewall
 
 - name: firewall extra tcp ports
   ufw: rule=allow port={{ item }}
   with_items: "{{ allow_tcp_ports }}"
+  tags: firewall
 
 - name: firewall extra tcp ports from restricted sources
   ufw: rule=allow port={{ item.0.port }} from={{ item.1 }}
   with_subelements:
     - "{{ allow_tcp_ports_from }}"
     - from
-  tags: prova
+  tags: firewall
 
 # packages
 
