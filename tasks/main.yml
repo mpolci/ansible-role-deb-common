@@ -52,12 +52,12 @@
 
 - name: firewall/ssh delete policy from all
   ufw: rule=limit port={{ ssh_port }} delete=yes
-  when: "{{ limit_ssh_from | count > 0 }}"
+  when: limit_ssh_from | count > 0
   tags: firewall
 
 - name: firewall/ssh limit policy from all
   ufw: rule=limit port={{ ssh_port }}
-  when: "{{ limit_ssh_from | count == 0 }}"
+  when: limit_ssh_from | count == 0
   tags: firewall
 
 - ufw: direction=outgoing policy=allow
