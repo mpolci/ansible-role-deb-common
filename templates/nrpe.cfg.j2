@@ -220,7 +220,7 @@ command[check_users]=/usr/lib/nagios/plugins/check_users -w 5 -c 10
 command[check_load]=/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
 command[check_hd]=/usr/lib/nagios/plugins/check_disk -w 10% -c 5% -l --exclude-type=tracefs --exclude-type=fuse.gvfsd-fuse --exclude-type=cgroup --exclude_device=/run/lxcfs/controllers
 command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
-command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 165 -c 220
+command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w {{ nrpe_proc_w }} -c {{ nrpe_proc_c }}
 command[check_apt]=/usr/lib/nagios/plugins/check_apt
 command[check_swap]=/usr/lib/nagios/plugins/check_swap -w 10% -c 5%
 command[check_ntp]=/usr/lib/nagios/plugins/check_ntp_time -H time.google.com -w 1 -c 2

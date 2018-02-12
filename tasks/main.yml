@@ -1,5 +1,11 @@
 ---
 
+- name: Load a variable file based on the OS type.
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "vars/default.yml"
+
 - name: authorized ssh keys for user root
   authorized_key: user=root key={{ item }}
   with_items: "{{ authorized_ssh_keys }}"
