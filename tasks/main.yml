@@ -5,6 +5,7 @@
   with_first_found:
     - "vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
     - "vars/default.yml"
+  tags: always
 
 - name: authorized ssh keys for user root
   authorized_key: user=root key={{ item }}
