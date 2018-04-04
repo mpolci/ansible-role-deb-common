@@ -1,2 +1,2 @@
-nrpe_proc_w: 200
-nrpe_proc_c: 260
+nrpe_proc_w: 250
+nrpe_proc_c: 300
