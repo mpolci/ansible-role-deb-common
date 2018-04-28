@@ -118,3 +118,4 @@
     - reload rsyslog
   tags: [syslog, monitoring]
 
+- meta: flush_handlers
